@@ -10,8 +10,8 @@ router.get("/", async (req, res) => {
   try {
     const prodData = await Product.findAll({
       include: [
-        { model: Category, attributes: [`category`] },
-        { model: Tag, attributes: [`tag`] },
+        { model: Category, attributes: [`category_name`] },
+        { model: Tag, attributes: [`tag_name`] },
       ],
     });
     res.status(200).json(prodData);
@@ -125,26 +125,24 @@ router.put("/:id", (req, res) => {
     });
 });
 
-router.delete("/:id", (req, res) => {
-  // delete one product by its `id` value
-  router.delete("/:id", async (req, res) => {
-    try {
-      const killProd = await Category.destroy({
-        where: {
-          id: req.params.id,
-        },
-      });
+// delete one product by its `id` value
+router.delete("/:id", async (req, res) => {
+  try {
+    const killProd = await Product.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
 
-      if (!killProd) {
-        res.status(404).json({ message: "No product found with that id!" });
-        return;
-      }
-
-      res.status(200).json(killProd);
-    } catch (err) {
-      res.status(500).json(err);
+    if (!killProd) {
+      res.status(404).json({ message: "No product found with that id!" });
+      return;
     }
-  });
+
+    res.status(200).json(killProd);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;
